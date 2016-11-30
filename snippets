@@ -1,0 +1,42 @@
+// Param extractor
+function (param, string) {
+    var results = new RegExp('[\\?&amp;]' + param + '=([^&#$]*)').exec(string);
+    return results[1] || 0;
+};
+
+// Some HTML
+style="float:left; padding-right:10px; width=48px; height: 48px;"
+
+// background manifest
+"background": {
+    "scripts": ["bg.js"]
+},
+
+// browser action manifest
+"browser_action": {
+  "default_icon": {
+      "16": "assets/icon16.png"
+  },
+  "default_title": "Some Nice Name",
+  "default_popup": "popup.html"
+},
+
+// Permissions:
+"storage",
+"webRequest",
+"webRequestBlocking",
+
+// Blocking code
+chrome.webRequest.onBeforeRequest.addListener(
+  callback,
+  // Applies to following url patterns
+  {urls: ['*://*.youtube.com/*']},
+  // In request blocking mode
+  ['blocking']
+);
+
+// blocking callback
+function(details) {
+  var redirectUrl = details.url;
+  return {redirectUrl: redirectTo};
+}

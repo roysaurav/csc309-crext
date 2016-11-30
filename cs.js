@@ -1,4 +1,11 @@
-var iconDataUrl =
+/**
+ * App NameSpace
+ * @type {object}
+ */
+var youtubeOnRepeatApp = {};
+
+// Constant
+youtubeOnRepeatApp.ICON_DATA_URL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAFwklE' +
   'QVRoge2aXYhVVRTHt/kBmqUVZkFBQRgxUNjVhtGZOWstP++9e20Q9VmQeurjpUCIHswgKAghKM' +
   'kgIdJM6E3LEp2XGJWGNPGqeOeevXahMPbpDIozOnN6OPfeOXPvuV9Hx5nAA4s5zAzrnN/+r//a' +
@@ -27,5 +34,64 @@ var iconDataUrl =
   'NrfBwDLulyytyKe7Fv269vn7+1Kp2duVum/6KVAFAuXDquLpxCVhPGoZ9wrjp9bQmVrz/PQAiC' +
   'oyfj/+ZyXGZPPSXQeYgrgHMNXx/wcoz9bhXxUDZ0pT4sR/rphOUWoOYihQjmGP1XjIMh4XxvPO' +
   '4G9iaEA0XRODI1P/bzaRYLoaTqzYbxlPi6Fj/wFSuttApJJnVAAAAABJRU5ErkJggg==';
-  
-console.log("I Am Loaded!");
+
+/**
+ * Gets user info container.
+ * @return {object} element
+ */
+youtubeOnRepeatApp.getUserInfoContainer = function () {
+    return document.querySelector('div#watch7-user-header');    
+};
+
+/**
+ * Helps communicate with the background pages.
+ * @param {object} request
+ * @param {function} callback
+ */
+youtubeOnRepeatApp.sendMessageToBackground = function (request, callback) {
+    chrome.runtime.sendMessage(request, callback);
+};
+
+/**
+ * Creates a repeat button.
+ * @param {string} repeatUrl
+ * @return {string} html element as string.
+ */
+youtubeOnRepeatApp.createRepeatButton = function (repeatUrl) { 
+    return '<a href="' + repeatUrl + '">' +
+             '<img style="float:left; padding-right:10px; width=48px; height: 48px;" src="' + this.ICON_DATA_URL
+             + '" >' +
+           '</a > ';
+};
+
+/**
+ * Adds repeat button to page.
+ * @param {object} button
+ */
+youtubeOnRepeatApp.addRepeatButton = function (button) {
+    var container = this.getUserInfoContainer();
+    container.innerHTML = button + container.innerHTML;
+}
+
+/**
+ * Handles the repeat link callback.
+ * @param {object} response
+ */
+youtubeOnRepeatApp.repeatLinkCallBack = function (response) { 
+    var repeatButton = this.createRepeatButton(response.repeatUrl);
+    this.addRepeatButton(repeatButton);
+};
+
+/**
+ * Init method
+ */
+youtubeOnRepeatApp.init = function () {
+    console.log("I Am Loaded!");
+    var userInfoContainer = this.getUserInfoContainer();
+    console.log(userInfoContainer);
+    this.sendMessageToBackground(
+        { action: 'getRepeatUrl', url: top.location.href }, this.repeatLinkCallBack.bind(this));
+};
+
+// Init app in page
+youtubeOnRepeatApp.init();

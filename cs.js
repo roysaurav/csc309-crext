@@ -1,4 +1,12 @@
-var iconDataUrl =
+/**
+ * App namespace.
+ * @type {object}
+ */
+var YouTubeOnRepeatApp = {};
+
+// Some Constants
+youtubeOnRepeatApp.URL_BASE = 'http://youtubeonrepeat.com/watch?v=';
+YouTubeOnRepeatApp.ICON_DATA_URL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAFwklE' +
   'QVRoge2aXYhVVRTHt/kBmqUVZkFBQRgxUNjVhtGZOWstP++9e20Q9VmQeurjpUCIHswgKAghKM' +
   'kgIdJM6E3LEp2XGJWGNPGqeOeevXahMPbpDIozOnN6OPfeOXPvuV9Hx5nAA4s5zAzrnN/+r//a' +
@@ -27,5 +35,45 @@ var iconDataUrl =
   'NrfBwDLulyytyKe7Fv269vn7+1Kp2duVum/6KVAFAuXDquLpxCVhPGoZ9wrjp9bQmVrz/PQAiC' +
   'oyfj/+ZyXGZPPSXQeYgrgHMNXx/wcoz9bhXxUDZ0pT4sR/rphOUWoOYihQjmGP1XjIMh4XxvPO' +
   '4G9iaEA0XRODI1P/bzaRYLoaTqzYbxlPi6Fj/wFSuttApJJnVAAAAABJRU5ErkJggg==';
-  
-console.log("I Am Loaded!");
+
+/**
+ * Extracts parameters from the url string.
+ * @param {string} param
+ * @param {string} string
+ * @return {string} param value.
+ */
+youtubeOnRepeatApp.urlParamExtract = function (param, string) {
+    var results = new RegExp('[\\?&amp;]' + param + '=([^&#$]*)').exec(string);
+    return results[1] || 0;
+};
+
+/**
+ * Creates a repeat button.
+ * @param {string} repeatUrl
+ * @return {string} html element as string.
+ */
+youtubeOnRepeatApp.createRepeatButton = function () { 
+    return '<img src="' + this.ICON_DATA_URL + '">';
+};
+
+/**
+ * Gets user info container.
+ * @return {object} element
+ */
+youtubeOnRepeatApp.getUserInfoContainer = function () {
+    
+};
+
+/**
+ * Adds repeat button to page.
+ * @param {object} button
+ */
+youtubeOnRepeatApp.addRepeatButton = function (button) {
+    
+}
+
+YouTubeOnRepeatApp.init = function () { 
+  console.log('I am Loaded');
+};
+
+YouTubeOnRepeatApp.init();

@@ -1,15 +1,30 @@
 {
   "manifest_version": 2,    // This does not change.
-  "name": "",               // Name your extension here.
-  "description": "",        // Describe your Extension.
-  "version": "",            // This is for chrome webstore to know if upgraded.
-  "permissions": [],        // Array of permissions (https://goo.gl/l8wSdl)
+  "name": "YouTube on Repeat",               // Name your extension here.
+  "description": "Repeats Videos",        // Describe your Extension.
+  "version": "0.1",            // This is for chrome webstore to know if upgraded.
+  "permissions": [
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "*://*.youtube.com/*"
+  ],        // Array of permissions (https://goo.gl/l8wSdl)
   "content_scripts": [      // Array of objects (https://goo.gl/rYhsVq)
     {
-          "matches": [""],  // Array of urls to run this script on.
-          "js": [""]        // Array of scripts to run matched urls
+          "matches": ["*://*.youtube.com/*"],  // Array of urls to run this script on.
+          "js": ["cs.js"]        // Array of scripts to run matched urls
     }
   ],
+  "browser_action": {
+    "default_icon": {
+        "16": "assets/icon16.png"
+    },
+    "default_title": "Youtube on repeat",
+    "default_popup": "popup.html"
+  },
+  "background": {
+      "scripts": ["bg.js"]
+  },
   "icons": {
     "16": "assets/icon16.png",
     "48": "assets/icon48.png",

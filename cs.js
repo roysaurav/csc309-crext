@@ -1,11 +1,11 @@
-/**
+  /**
  * App namespace.
  * @type {object}
  */
 var YouTubeOnRepeatApp = {};
 
 // Some Constants
-youtubeOnRepeatApp.URL_BASE = 'http://youtubeonrepeat.com/watch?v=';
+YouTubeOnRepeatApp.URL_BASE = 'http://youtubeonrepeat.com/watch?v=';
 YouTubeOnRepeatApp.ICON_DATA_URL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAFwklE' +
   'QVRoge2aXYhVVRTHt/kBmqUVZkFBQRgxUNjVhtGZOWstP++9e20Q9VmQeurjpUCIHswgKAghKM' +
@@ -42,9 +42,13 @@ YouTubeOnRepeatApp.ICON_DATA_URL =
  * @param {string} string
  * @return {string} param value.
  */
-youtubeOnRepeatApp.urlParamExtract = function (param, string) {
+YouTubeOnRepeatApp.urlParamExtract = function (param, string) {
     var results = new RegExp('[\\?&amp;]' + param + '=([^&#$]*)').exec(string);
     return results[1] || 0;
+};
+
+YouTubeOnRepeatApp.createRepeatLink = function () {
+  return this.URL_BASE + this.urlParamExtract('v', window.location.href)
 };
 
 /**
@@ -52,28 +56,30 @@ youtubeOnRepeatApp.urlParamExtract = function (param, string) {
  * @param {string} repeatUrl
  * @return {string} html element as string.
  */
-youtubeOnRepeatApp.createRepeatButton = function () { 
-    return '<img src="' + this.ICON_DATA_URL + '">';
+YouTubeOnRepeatApp.createRepeatButton = function () { 
+    return '<a href="'+this.createRepeatLink()+'"><img style="float:left; padding-right:10px; width=48px; height: 48px;" src="' + this.ICON_DATA_URL + '"></a>';
 };
 
 /**
  * Gets user info container.
  * @return {object} element
  */
-youtubeOnRepeatApp.getUserInfoContainer = function () {
-    
+YouTubeOnRepeatApp.getUserInfoContainer = function () {
+  return document.querySelector('div#watch7-user-header');
 };
 
 /**
  * Adds repeat button to page.
  * @param {object} button
  */
-youtubeOnRepeatApp.addRepeatButton = function (button) {
+YouTubeOnRepeatApp.addRepeatButton = function (button) {
     
 }
 
 YouTubeOnRepeatApp.init = function () { 
   console.log('I am Loaded');
+  var container = this.getUserInfoContainer();
+  container.innerHTML = this.createRepeatButton() + container.innerHTML;
 };
 
 YouTubeOnRepeatApp.init();

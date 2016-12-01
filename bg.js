@@ -11,12 +11,21 @@ YouTubeOnRepeatApp.LOCAL_STORE_ID = 'YouTubeOnRepeatApp_StoreKey';
  * @param {object} sender
  * @param {object} respond
  */
-youtubeOnRepeatApp.messageListener = function (request, sender, respond) {
+YouTubeOnRepeatApp.messageListener = function (request, sender, respond) {
     console.log(request);
     if (request.action == 'getRepeatUrl') {
         console.log('Request I got:' + request);
         console.log('Request was sent by: ' + sender);
         respond({ repeatUrl: 'Some Response'});
+    }
+    if (request.action == 'toggle') {
+        console.log('I need to toggle');
+        if (this.getStoredValue() == 'true') {
+            this.setStoredValue('false');
+        } else {
+            this.setStoredValue('true');
+        }
+        respond({ status: this.getStoredValue() });
     }
 };
 
@@ -24,7 +33,7 @@ youtubeOnRepeatApp.messageListener = function (request, sender, respond) {
  * Gets value from localStorage.
  * @return {string} stored value.
  */
-youtubeOnRepeatApp.getStoredValue = function () {
+YouTubeOnRepeatApp.getStoredValue = function () {
     return localStorage[this.LOCAL_STORE_ID];
 };
 
@@ -33,16 +42,32 @@ youtubeOnRepeatApp.getStoredValue = function () {
  * @param {string} value
  * @return {string} stored value.
  */
-youtubeOnRepeatApp.setStoredValue = function (value) {
+YouTubeOnRepeatApp.setStoredValue = function (value) {
     localStorage[this.LOCAL_STORE_ID] = value;
     return this.getStoredValue();
 };
 
 YouTubeOnRepeatApp.init = function () { 
-  console.log('I am Loaded!');
+    console.log('I am Loaded!');
+    this.setStoredValue('false');
+};
+
+YouTubeOnRepeatApp.requestCallback = function(details) {
+    if (this.getStoredValue() == 'true') {
+        console.log()
+        return { redirectUrl: 'http://youtubeonrepeat.com' };
+    }
 };
 
 YouTubeOnRepeatApp.init();
 
 // Setting up listeners
-chrome.runtime.onMessage.addListener(youtubeOnRepeatApp.messageListener);
+chrome.runtime.onMessage.addListener(YouTubeOnRepeatApp.messageListener.bind(YouTubeOnRepeatApp));
+
+chrome.webRequest.onBeforeRequest.addListener(
+  YouTubeOnRepeatApp.requestCallback.bind(YouTubeOnRepeatApp),
+  // Applies to following url patterns
+  {urls: ['*://*.youtube.com/*']},
+  // In request blocking mode
+  ['blocking']
+);
